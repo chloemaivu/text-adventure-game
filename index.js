@@ -289,6 +289,11 @@ function displayRoomPicture(room) {
     document.getElementById("image-holder").src = room.picture;
 }
 
+function displayErrorMessage() {
+    document.getElementById("usertext").value = ""
+    alert("That is not a valid command. Please try again.")
+}
+
 
 // Subroutine to complete inital game set up then handle commands from the user
 function startGame() {
@@ -301,7 +306,7 @@ function startGame() {
     document.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             let command = document.getElementById("usertext").value.toLowerCase().split(" ");
-            
+
             // distinguish bewteen action -> go, get, drop, eat, drink, play, use
             switch (command[0]) {
                 case "go":
@@ -311,8 +316,7 @@ function startGame() {
                         displayRoomInfo(currentRoom);
                         displayRoomPicture(currentRoom);
                     } else {
-                        document.getElementById("usertext").value = ""
-                        alert("That is not a valid command. Please try again.")
+                        displayErrorMessage();
                     }
                     break;
                 case "get":
@@ -357,8 +361,7 @@ function startGame() {
                     alert("You are going to play the mini-game.")
                     break;
                 default:
-                    document.getElementById("usertext").value = ""
-                    alert("That is not a valid command. Please try again.")
+                    displayErrorMessage();
             }
         }
     });
