@@ -180,7 +180,7 @@ class Enemy extends Character {
         this._weakness = "";
     }
 
-    //DO I NEED TO MAKE GET WEAKNESS? CHECK SLIDES.
+    //DO I NEED TO MAKE GETTER FOR WEAKNESS? CHECK SLIDES.
 
     set weakness(value) {
         if (value.length < 4) {
@@ -189,8 +189,6 @@ class Enemy extends Character {
         }
         this._weakness = value;
     }
-
-
     // a method to determine the reult of fighting an enemy
 
     // item the item used to fight the enemy 
@@ -248,11 +246,24 @@ const Mother = new Character("Mother");
 Mother.conversation = "Hush now. I'll ask them who they are";
 Mother.description = "a round faced woman";
 
+const GiantSlug = new Enemy("Giant Slug");
+GiantSlug.conversation = "squelch squelch";
+GiantSlug.description = "a slug taking up the entire bathtub";
+GiantSlug.weakness = "losing rock paper scissors";
+
+const Librarian = new Enemy("Librarian");
+Librarian.conversation = "hmpff";
+Librarian.description = "a haughty looking troll";
+Librarian.weakness = "losing rock paper scissors";
+
 
 // add characters to rooms
 TinyRoom.character = Thimble;
 TinyRoom.character = Mother;
 TinyRoom.character = Bean;
+
+Bathroom.character = GiantSlug;
+Library.character = Librarian;
 
 // create items
 // const Bottle = new Item("Bottle");
@@ -291,7 +302,7 @@ function startGame() {
         if (event.key === "Enter") {
             let command = document.getElementById("usertext").value.toLowerCase().split(" ");
             
-            // distinguish bewteen action -> go, get, drop, eat, drink
+            // distinguish bewteen action -> go, get, drop, eat, drink, play, use
             switch (command[0]) {
                 case "go":
                     const directions = ["north", "south", "east", "west"]
@@ -305,7 +316,7 @@ function startGame() {
                     }
                     break;
                 case "get":
-                    // if command[1] is an item that can be picked up
+                    // if command[1] is an item that can be picked up e.g. star
                     // add item to inventory
                     // remove item from the current room (unlink)
                     document.getElementById("usertext").value = ""
@@ -330,6 +341,20 @@ function startGame() {
                     // player drinks food item
                     document.getElementById("usertext").value = ""
                     alert("You drank the food.")
+                    break;
+                case "use":
+                    // if command[1] is key
+                    // player locks or unlocks the door
+                    // if locked, the player cannot move into the affected room
+                    // if unlocked, the player can now move into the unlocked room
+                    document.getElementById("usertext").value = ""
+                    alert("You locked/ unlocked the door.")
+                    break;
+                case "play":
+                    // if command[1] is game
+                    // player plays the mini game
+                    document.getElementById("usertext").value = ""
+                    alert("You are going to play the mini-game.")
                     break;
                 default:
                     document.getElementById("usertext").value = ""
