@@ -176,37 +176,39 @@ class Character {
 
 class Enemy extends Character {
     constructor(name) {
-      super(name);
-      this._weakness = "";
+        super(name);
+        this._weakness = "";
     }
-  
+
+    //DO I NEED TO MAKE GET WEAKNESS? CHECK SLIDES.
+
     set weakness(value) {
-      if (value.length < 4) {
-        alert("Decription is too short.");
-        return;
-      }
-      this._weakness = value;
+        if (value.length < 4) {
+            alert("Decription is too short.");
+            return;
+        }
+        this._weakness = value;
     }
-  
+
 
     // a method to determine the reult of fighting an enemy
-     
+
     // item the item used to fight the enemy 
     // the result of the fight true = win, falese = lose
 
     fight(item) {
-      if (item = this_weakness) {
-        return true;
-      } else {
-        return false;
-      }
+        if (item = this_weakness) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
 //create the indiviual room objects and add their descriptions and pictures
-const Kitchen = new Room("kitchen");
-Kitchen.description = "countertops heaving with pots and pans.";
-Kitchen.picture = "https://www.gamespew.com/wp-content/uploads/2021/05/behindtheframe-696x391.jpg";
+const Bathroom = new Room("bathroom");
+Bathroom.description = "a tiled room with a bathtub.";
+Bathroom.picture = "https://live.staticflickr.com/7331/9366169103_1d3521ff76_b.jpg";
 
 const Hall = new Room("hall");
 Hall.description = "a dimly lit circular hall, with a teeny tiny door partially hidden behind curtains.";
@@ -221,17 +223,17 @@ TinyRoom.description = "three people eating.";
 TinyRoom.picture = "https://gcottraux.files.wordpress.com/2016/12/003-borrowers-emilia-dziubak.jpg?w=648";
 
 //link the rooms together
-Hall.linkRoom("north", Kitchen);
+Hall.linkRoom("north", Bathroom);
 Hall.linkRoom("east", Library);
 Hall.linkRoom("south", TinyRoom);
 
-Kitchen.linkRoom("south", Hall);
+Bathroom.linkRoom("south", Hall);
 
 Library.linkRoom("west", Hall);
 
 TinyRoom.linkRoom("north", Hall);
 
-//add characters
+// create characters
 
 // FIX: ALLOW MULTIPLE CHARACTERS IN ONE ROOM
 const Thimble = new Character("Thimble");
@@ -251,6 +253,9 @@ Mother.description = "a round faced woman";
 TinyRoom.character = Thimble;
 TinyRoom.character = Mother;
 TinyRoom.character = Bean;
+
+// create items
+// const Bottle = new Item("Bottle");
 
 // Subroutine to display information about the current room
 function displayRoomInfo(room) {
@@ -284,17 +289,52 @@ function startGame() {
     //handle commands
     document.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
-            command = document.getElementById("usertext").value;
-            const directions = ["north", "south", "east", "west"]
-            if (directions.includes(command.toLowerCase())) {
-                currentRoom = currentRoom.move(command.toLowerCase())
-                displayRoomInfo(currentRoom);
-                displayRoomPicture(currentRoom);
-            } else {
-                document.getElementById("usertext").value = ""
-                alert("that is not a valid command please try again")
+            let command = document.getElementById("usertext").value.toLowerCase().split(" ");
+            
+            // distinguish bewteen action -> go, get, drop, eat, drink
+            switch (command[0]) {
+                case "go":
+                    const directions = ["north", "south", "east", "west"]
+                    if (directions.includes(command[1])) {
+                        currentRoom = currentRoom.move(command[1])
+                        displayRoomInfo(currentRoom);
+                        displayRoomPicture(currentRoom);
+                    } else {
+                        document.getElementById("usertext").value = ""
+                        alert("That is not a valid command. Please try again.")
+                    }
+                    break;
+                case "get":
+                    // if command[1] is an item that can be picked up
+                    // add item to inventory
+                    // remove item from the current room (unlink)
+                    document.getElementById("usertext").value = ""
+                    alert("You picked up the item. It is now in your inventory.")
+                    break;
+                case "drop":
+                    // if command[1] is an item that can be dropped
+                    // remove item from inventory
+                    // change location of item to the current room
+                    // add item to the current room
+                    document.getElementById("usertext").value = ""
+                    alert("You dropped the item.")
+                    break;
+                case "eat":
+                    // if command[1] is a food item that can be eaten
+                    // player eats food item
+                    document.getElementById("usertext").value = ""
+                    alert("You ate the food.")
+                    break;
+                case "drink":
+                    // if command[1] is a food item that can be drank
+                    // player drinks food item
+                    document.getElementById("usertext").value = ""
+                    alert("You drank the food.")
+                    break;
+                default:
+                    document.getElementById("usertext").value = ""
+                    alert("That is not a valid command. Please try again.")
             }
-
         }
     });
 }
