@@ -43,7 +43,7 @@ class Room {
         this._character = value;
     }
 
-    // add validation to the picture
+    // add validation to the picture!! must start with https and end with jpg and have speech marks
     set picture(value) {
         this._picture = value;
     }
@@ -78,7 +78,6 @@ class Room {
             return this._linkedRooms[direction];
         } else {
             alert("You can't go that way",);
-            alert(this._name)
             return this;
         }
     }
@@ -86,8 +85,8 @@ class Room {
 
 class Item {
     constructor(name) {
-        this._name = name,
-            this._description = ""
+        this._name = name;
+        this._description = "";
     }
 
     set name(value) {
@@ -124,9 +123,9 @@ class Item {
 
 class Character {
     constructor(name) {
-        this._name = name,
-            this._description = ""
-        this._conversation = ""
+        this._name = name;
+        this._description = "";
+        this._conversation = "";
     }
     set name(value) {
         if (value.length < 4) {
@@ -193,7 +192,7 @@ class Enemy extends Character {
     // a method to determine the reult of fighting an enemy
      
     // item the item used to fight the enemy 
-    // the result of the fight true = win, falese = loose
+    // the result of the fight true = win, falese = lose
 
     fight(item) {
       if (item = this_weakness) {
@@ -206,39 +205,52 @@ class Enemy extends Character {
 
 //create the indiviual room objects and add their descriptions and pictures
 const Kitchen = new Room("kitchen");
-Kitchen.description = "a long narrow room with worktops on either side and a large bench in the middle.";
-Kitchen.picture = "https://i2-prod.coventrytelegraph.net/incoming/article15363407.ece/ALTERNATES/s1227b/0_JS167221748.jpg";
-const Lounge = new Room("lounge");
-Lounge.description = "a large room with two sofas and a large fire place.";
-Lounge.picture = "https://ccbritanico.com/wp-content/uploads/2012/12/aiw-doors.jpg";
-const GamesRoom = new Room("Games Room");
-GamesRoom.description = "a large room with a pool table at it's centre.";
-GamesRoom.picture = "";
+Kitchen.description = "countertops heaving with pots and pans.";
+Kitchen.picture = "https://www.gamespew.com/wp-content/uploads/2021/05/behindtheframe-696x391.jpg";
+
 const Hall = new Room("hall");
-Hall.description = "a grand entrance hall with large paintings around the walls.";
-Hall.picture = "";
+Hall.description = "a dimly lit circular hall, with a teeny tiny door partially hidden behind curtains.";
+Hall.picture = "https://ccbritanico.com/wp-content/uploads/2012/12/aiw-doors.jpg";
+
+const Library = new Room("library");
+Library.description = "a large room with tall shelves filled with books.";
+Library.picture = "https://www.messynessychic.com/wp-content/uploads/2018/06/5C3FB7B6-866D-444E-AC7B-ADFCA3A409C0.jpg";
+
+const TinyRoom = new Room("tiny room");
+TinyRoom.description = "three people eating.";
+TinyRoom.picture = "https://gcottraux.files.wordpress.com/2016/12/003-borrowers-emilia-dziubak.jpg?w=648";
 
 //link the rooms together
-Kitchen.linkRoom("south", Lounge);
-Kitchen.linkRoom("east", Hall);
-Lounge.linkRoom("north", Kitchen);
-Lounge.linkRoom("east", GamesRoom);
-GamesRoom.linkRoom("west", Lounge);
-GamesRoom.linkRoom("north", Hall);
-Hall.linkRoom("south", GamesRoom);
-Hall.linkRoom("west", Kitchen);
+Hall.linkRoom("north", Kitchen);
+Hall.linkRoom("east", Library);
+Hall.linkRoom("south", TinyRoom);
+
+Kitchen.linkRoom("south", Hall);
+
+Library.linkRoom("west", Hall);
+
+TinyRoom.linkRoom("north", Hall);
 
 //add characters
-const Dave = new Enemy("Dave");
-Dave.conversation = "grrr brains";
-Dave.description = "a smelly Zombie";
-Dave.pronoun = "he";
-Dave.weakness = "cheese";
+
+// FIX: ALLOW MULTIPLE CHARACTERS IN ONE ROOM
+const Thimble = new Character("Thimble");
+Thimble.conversation = "Mum! Look a human";
+Thimble.description = "a small mouselike boy";
+
+const Bean = new Character("Bean");
+Bean.conversation = "Mum! Look a human";
+Bean.description = "a small girl";
+
+const Mother = new Character("Mother");
+Mother.conversation = "Hush now. I'll ask them who they are";
+Mother.description = "a round faced woman";
 
 
 // add characters to rooms
-Kitchen.character = Dave;
-
+TinyRoom.character = Thimble;
+TinyRoom.character = Mother;
+TinyRoom.character = Bean;
 
 // Subroutine to display information about the current room
 function displayRoomInfo(room) {
@@ -265,7 +277,7 @@ function displayRoomPicture(room) {
 // Subroutine to complete inital game set up then handle commands from the user
 function startGame() {
     //set and display start room
-    currentRoom = Kitchen
+    currentRoom = Hall
     displayRoomInfo(currentRoom);
     displayRoomPicture(currentRoom);
 
@@ -275,7 +287,7 @@ function startGame() {
             command = document.getElementById("usertext").value;
             const directions = ["north", "south", "east", "west"]
             if (directions.includes(command.toLowerCase())) {
-                currentRoom = currentRoom.move(command)
+                currentRoom = currentRoom.move(command.toLowerCase())
                 displayRoomInfo(currentRoom);
                 displayRoomPicture(currentRoom);
             } else {
