@@ -4,6 +4,7 @@ class Room {
         this._description = "";
         this._linkedRooms = {};
         this._character = "";
+        this._item = "";
         this._picture = "";
     }
 
@@ -17,6 +18,10 @@ class Room {
 
     get character() {
         return this._character;
+    }
+
+    get item() {
+        return this._item;
     }
 
     get picture() {
@@ -41,6 +46,10 @@ class Room {
 
     set character(value) {
         this._character = value;
+    }
+
+    set item(value) {
+        this._item = value;
     }
 
     // add validation to the picture!! must start with https and end with jpg and have speech marks
@@ -102,7 +111,7 @@ class Item {
             alert("Decription is too short.");
             return;
         }
-        this._name = value;
+        this._description = value;
     }
 
     get name() {
@@ -113,10 +122,9 @@ class Item {
         return this._description;
     }
 
-
     // a method to produce friendly item description
     describe() {
-        return "The " + this._name + " is " + this._description;
+        return "There is a " + this._name + " " + this._description;
     }
 
 }
@@ -137,7 +145,7 @@ class Character {
 
     set description(value) {
         if (value.length < 4) {
-            alert("Decription is too short.");
+            alert("Description is too short.");
             return;
         }
         this._description = value;
@@ -192,7 +200,7 @@ class Enemy extends Character {
     // a method to determine the reult of fighting an enemy
 
     // item the item used to fight the enemy 
-    // the result of the fight true = win, falese = lose
+    // the result of the fight true = win, false = lose
 
     fight(item) {
         if (item = this_weakness) {
@@ -249,7 +257,7 @@ Mother.description = "a round faced woman";
 const GiantSlug = new Enemy("Giant Slug");
 GiantSlug.conversation = "squelch squelch";
 GiantSlug.description = "a slug taking up the entire bathtub";
-GiantSlug.weakness = "losing rock paper scissors";
+GiantSlug.weakness = "salt";
 
 const Librarian = new Enemy("Librarian");
 Librarian.conversation = "hmpff";
@@ -266,7 +274,15 @@ Bathroom.character = GiantSlug;
 Library.character = Librarian;
 
 // create items
-// const Bottle = new Item("Bottle");
+const Cake = new Item("cake");
+Cake.description = "being eaten by the tiny people.";
+
+const Potion = new Item("potion");
+Potion.description = "on the table, with a note around it saying \"Drink Me\".";
+
+// add items to rooms
+TinyRoom.item = Cake; 
+Hall.item = Potion; 
 
 // Subroutine to display information about the current room
 function displayRoomInfo(room) {
@@ -277,8 +293,15 @@ function displayRoomInfo(room) {
         occupantMsg = room.character.describe() + ". " + room.character.converse()
     }
 
+    let itemMsg = ""
+    if (room.item === "") {
+        itemMsg = ""
+    } else {
+        itemMsg = room.item.describe()
+    }
+
     textContent = "<p>" + room.describe() + "</p>" + "<p>" +
-        occupantMsg + "</p>" + "<p>" + room.getDetails() + "</p>";
+        occupantMsg + "</p>" + "<p>" + itemMsg + "</p>" + "<p>" + room.getDetails() + "</p>";
 
     document.getElementById("textarea").innerHTML = textContent;
     document.getElementById("buttonarea").innerHTML = '<input type="text" id="usertext" />';
@@ -320,7 +343,7 @@ function startGame() {
                     }
                     break;
                 case "get":
-                    // if command[1] is an item that can be picked up e.g. star
+                    // if command[1] is an item that can be picked up e.g. key
                     // add item to inventory
                     // remove item from the current room (unlink)
                     document.getElementById("usertext").value = ""
@@ -335,16 +358,16 @@ function startGame() {
                     alert("You dropped the item.")
                     break;
                 case "eat":
-                    // if command[1] is a food item that can be eaten
+                    // if command[1] is a food item
                     // player eats food item
                     document.getElementById("usertext").value = ""
                     alert("You ate the food.")
                     break;
                 case "drink":
-                    // if command[1] is a food item that can be drank
+                    // if command[1] is a food item
                     // player drinks food item
                     document.getElementById("usertext").value = ""
-                    alert("You drank the food.")
+                    alert("You drank the food item.")
                     break;
                 case "use":
                     // if command[1] is key
